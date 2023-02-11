@@ -1,5 +1,5 @@
 # Starshot
-testxb
+test
 ## Usage
 
 ## Installation
