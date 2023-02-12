@@ -1,6 +1,6 @@
 (defpackage starshot/mop
   (:use :cl)
-  (:import-from :starshot/combinators :compose :juxt)
+  (:import-from :tactile :compose :juxt)
   (:export #:get-classname #:get-slot-names #:slots->plist #:update-plist #:update-object #:update-object* #:close-enough-p #:self))
 
 (in-package :starshot/mop)

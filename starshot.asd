@@ -2,12 +2,11 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :depends-on ("closer-mop")
+  :depends-on ("closer-mop" "tactile")
   :serial T
   :components ((:module "src"
                 :components
-                ((:file "combinators")
-                 (:file "mop")
+                ((:file "mop")
                  (:file "vector")
                  (:file "particle"))))
   :description ""

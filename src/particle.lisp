@@ -2,7 +2,7 @@
   (:use :cl)
   (:local-nicknames (:vec :starshot/vector))
   (:local-nicknames (:mop :starshot/mop))
-  (:import-from :starshot/combinators #:compose #:juxt #:callable #:partialr #:partial)
+  (:import-from :tactile #:compose #:juxt #:callable #:partialr #:partial)
   (:export #:particle #:make-particle #:calculate-new-position #:calculate-new-velocity #:integrate #:p #:v #:a #:damping #:inverse-mass))
 
 (in-package :starshot/particle)

@@ -1,6 +1,6 @@
 (defpackage starshot/vector
   (:use :cl)
-  (:import-from :starshot/combinators #:compose #:juxt #:callable #:partialr #:partial #:reduce-apply)
+  (:import-from :tactile #:compose #:juxt #:callable #:partialr #:partial #:reduce-apply)
   (:export #:make-cartesian #:magnitude #:vec+ #:vec-minus #:x #:y #:z #:inverse #:scalar/ #:scalar* #:angle-between #:dot-product #:cross-product #:cartesian #:square-magnitude))
 
 (in-package :starshot/vector)

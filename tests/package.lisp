@@ -1,10 +1,10 @@
 (defpackage starshot/tests
   (:use :cl :fiveam)
-  (:import-from :starshot/combinators :compose :juxt)
+  (:import-from :tactile :compose :juxt)
   (:import-from :starshot/mop :update-object :update-object* :get-classname)
   (:import-from :starshot/vector :make-cartesian)
   (:import-from :starshot/particle :make-particle)
-  (:local-nicknames (:comb :starshot/combinators)
+  (:local-nicknames (:comb :tactile)
                     (:mop :starshot/mop)
                     (:vec :starshot/vector)
                     (:particle :starshot/particle)))
