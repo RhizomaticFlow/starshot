@@ -41,26 +41,62 @@
     (fiveam:is (close-enough-p (/ pi 2) (vec:angle-between vec-1 vec-2)))))
 
 (fiveam:test cartesian-updates-on-particle-position
-  (fiveam:is (= 1 (vec:y (particle:calculate-new-position (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 0 0) 0.995 1/3) 1)))))
+  (fiveam:is (= 1 (vec:y (p:calculate-new-position (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 0 0) 0.995 1/3 3 t) 1)))))
 
 (fiveam:test cartesian-updates-on-particle-velocity
-  (fiveam:is (= 1.9 (vec:y (particle:calculate-new-velocity (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 1 0) 0.9 1/3) 1)))))
+  (fiveam:is (= 1.9 (vec:y (p:calculate-new-velocity (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 1 0) 0.9 1/3 3 t) 1)))))
 
 (fiveam:test integration
-  (fiveam:is (= 1
-                (vec:y (particle:p
-                        (particle:integrate
-                         (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 1 0) 0.9 1/3)
-                         1 (make-cartesian 0 0 0)))))))
+  (fiveam:is (= 1.9
+                (vec:y (p:p
+                        (p:integrate
+                         (make-particle (make-cartesian 0 0 0) (make-cartesian 0 1 0) (make-cartesian 0 1 0) 0.9 1 3 t)
+                         1
+                         (make-cartesian 0 1 0)))))))
 
-;; (fiveam:test projectile-motion
-;;              (fiveam:is (eql ""
-;;                              (reduce (lambda (acc step)
-;;                                        (let ((new-part (particle:integrate acc 1 (make-cartesian 0 -10.0 0))))
-;;                                          (format t "~a ~a ~a ~%"
-;;                                                  (vec:y (particle:p new-part))
-;;                                                  (vec:y (particle:v new-part))
-;;                                                  (vec:y (particle:a new-part)))
-;;                                          new-part))
-;;                                      (list 1 1 1 1 1)
-;;                                      :initial-value (make-particle (make-cartesian 0 0 0) (make-cartesian 0 10 0) (make-cartesian 0 30 0) 0.995 1/3)))))
+(fiveam:test collision-determination
+  (fiveam:is (p:collision?
+              (make-particle (make-cartesian 10 0 0) (make-cartesian 0 0 0) (make-cartesian 0 0 0) 0.9 1/3 5 t)
+              (make-particle (make-cartesian 0 0 0) (make-cartesian 0 0 0) (make-cartesian 0 0 0) 0.9 1/3 5 t)))
+  (fiveam:is (not (p:collision?
+                   (make-particle (make-cartesian 10.1 0 0) (make-cartesian 0 0 0) (make-cartesian 0 0 0) 0.9 1/3 5 t)
+                   (make-particle (make-cartesian 0 0 0) (make-cartesian 0 0 0) (make-cartesian 0 0 0) 0.9 1/3 5 t)))))
+
+(fiveam:test collision-calculation
+             (fiveam:is
+              (equal (list 3/4 15/4) 
+               (second (p:calculate-collision
+                       (make-particle (make-cartesian 0 0 0)
+                                      (make-cartesian 0 3 0)
+                                      (make-cartesian 0 0 0)
+                                      0.9 1/5 5 t)
+                       (make-particle (make-cartesian 0 0 0)
+                                      (make-cartesian 0 0 0)
+                                      (make-cartesian 0 0 0)
+                                      0.9 1/3 5 t))))))
+
+;;
+;; p0
+;; 
+
+(fiveam:test iterate-state
+  (let ((state1
+          (make-p0 0.01
+                   (list
+                    (make-particle (make-cartesian 0 0 0)
+                                   (make-cartesian 0 3 0)
+                                   (make-cartesian 0 0 0)
+                                   0.9 1/5 5 t)
+                    (make-particle (make-cartesian 0 0 0)
+                                   (make-cartesian 0 0 0)
+                                   (make-cartesian 0 0 0)
+                                   0.9 1/3 5 t)))))
+    (iterate-state state)
+    ;; (fiveam:is (equal (list 1 2) (iterate-state state)))
+    (fiveam:is (equal (list 0.74921024 3.746051)
+                      (mapcar
+                       (compose #'p:v #'vec:y)
+                       (p0:particles state))))
+    (fiveam:is
+     (= 0.03746051
+        (vec:y (p:p (second (p0:particles state))))))))

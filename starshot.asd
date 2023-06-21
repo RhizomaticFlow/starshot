@@ -2,13 +2,15 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :depends-on ("closer-mop" "tactile")
+  :depends-on ("closer-mop" "tactile" "lispbuilder-sdl")
   :serial T
   :components ((:module "src"
                 :components
                 ((:file "mop")
                  (:file "vector")
-                 (:file "particle"))))
+                 (:file "particle")
+                 (:file "graphics")
+                 (:file "p0"))))
   :description ""
   :in-order-to ((test-op (test-op "starshot/tests"))))
 

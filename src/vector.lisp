@@ -20,6 +20,10 @@
   (declare (type real x y z))
   (make-instance 'cartesian :x x :y y :z z))
 
+(defmethod print-object ((c cartesian) out)
+  (print-unreadable-object (c out :type t)
+    (format out "~a ~a ~a" (x c) (y c) (z c))))
+
 (defvar accessor-map
   (lambda (obj)
     (lambda (&rest accessors)
