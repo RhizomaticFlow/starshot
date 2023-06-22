@@ -4,7 +4,7 @@
   (:local-nicknames (:p :starshot/particle))
   (:local-nicknames (:mop :starshot/mop))
   (:import-from :tactile #:partial)
-  (:export #:make-p0 #:particles #:timestep #:iterate-state))
+  (:export #:make-p0 #:particles #:timestep #:iterate-state #:width #:height #:depth #:bounding))
 
 (in-package :starshot/p0)
 

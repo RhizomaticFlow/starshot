@@ -14,7 +14,7 @@ TODO:
 - Modelling gravity and/or charge? Are these particle specific? Should they be in an inherited class, or just attributes? 
 - Polar-coordinates?
 - Radiation?
-- Quantum mechanics?
+- Optics? Wave mechanics? TISE?
 - Multi-threading?
 - Improvements to collisions E.G., manually moving them out the others box
 - Improvements to graphical rendering E.G., not just squares
