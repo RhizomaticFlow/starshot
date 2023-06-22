@@ -63,10 +63,16 @@
 (defmethod integrate-state ((state p0))
   (mapcar
    (lambda (part)
-     (let ((integrated-part
+     (let* ((forces
+              (mapcar
+               (lambda (p2)
+                 (p:electric-force part p2))
+               (remove part (particles state))))
+            (resultant (reduce #'vec:vec+ forces))
+           (integrated-part
              (p:integrate part (timestep state)
                           ;; TODO Find resultant force on particle
-                          (vec:make-cartesian 0 0 0))))
+                          resultant)))
        integrated-part))
    (particles state)))
 

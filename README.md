@@ -21,7 +21,12 @@ TODO:
 
 ## Usage & Installation
 (ql:quickload :starshot)
+
+for collisions example
 (starshot/graphics:particles)
+
+for charged particles orbiting example
+(starshot/graphics:charges)
 
 ## Testing
 (asdf:test-system 'starshot)

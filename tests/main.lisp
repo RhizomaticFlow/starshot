@@ -75,6 +75,18 @@
                                       (make-cartesian 0 0 0)
                                       0.9 1/3 5 t nil))))))
 
+(fiveam:test electric-forces
+  (fiveam:is (= 8.988
+              (vec:y (p:electric-force
+                      (make-particle (make-cartesian 0 10 0)
+                                     (make-cartesian 0 0 0)
+                                     (make-cartesian 0 0 0)
+                                     0.9 1/3 5 t nil -1)
+                      (make-particle (make-cartesian 0 11 0)
+                                     (make-cartesian 0 0 0)
+                                     (make-cartesian 0 0 0)
+                                     0.9 1/3 5 t nil 1))))))
+
 ;;
 ;; p0
 ;; 
@@ -104,3 +116,28 @@
     (fiveam:is
      (= 10.03746051
         (vec:y (p:p (second (p0:particles state))))))))
+
+(fiveam:test iterate-state
+  (let ((state
+          (make-p0 1
+                   (list
+                    (make-particle (make-cartesian 10 0 10)
+                                   (make-cartesian 0 0 0)
+                                   (make-cartesian 0 0 0)
+                                   0.9 1 5 t nil 1)
+                    (make-particle (make-cartesian 10 1 10)
+                                   (make-cartesian 0 0 0)
+                                   (make-cartesian 0 0 0)
+                                   0.9 1 5 t nil 1))
+                   100
+                   100
+                   100
+                   :open)))
+    (iterate-state state)
+    (fiveam:is (= -8.988 (vec:y (p:a (first (p0:particles state))))))
+    (fiveam:is (= -8.988 (vec:y (p:v (first (p0:particles state))))))
+    (fiveam:is (= -8.988 (vec:y (p:p (first (p0:particles state))))))
+    (iterate-state state)
+    (fiveam:is (= -0.47365093 (vec:y (p:a (first (p0:particles state))))))
+    ))
+

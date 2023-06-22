@@ -3,7 +3,7 @@
   (:local-nicknames (:vec :starshot/vector))
   (:local-nicknames (:mop :starshot/mop))
   (:import-from :tactile #:compose #:juxt #:callable #:partialr #:partial)
-  (:export #:particle #:make-particle #:calculate-new-position #:calculate-new-velocity #:integrate #:p #:v #:a #:damping #:inverse-mass #:r #:collision? #:calculate-collision))
+  (:export #:particle #:make-particle #:calculate-new-position #:calculate-new-velocity #:integrate #:p #:v #:a #:damping #:inverse-mass #:r #:collision? #:calculate-collision #:electric-force))
 
 (in-package :starshot/particle)
 
@@ -36,11 +36,14 @@
    (fixed
     ;; Boolean
     :initarg :fixed
-    :accessor fixed
-    )))
+    :accessor fixed)
+   (q
+    ;; Charge
+    :initarg :q
+    :accessor q)))
 
-(defun make-particle (p v a damping inverse-mass r tangible fixed)
-  (make-instance 'particle :p p :v v :a a :damping damping :inverse-mass inverse-mass :r r :tangible tangible :fixed fixed))
+(defun make-particle (p v a damping inverse-mass r tangible fixed &optional (q 0))
+  (make-instance 'particle :p p :v v :a a :damping damping :inverse-mass inverse-mass :r r :tangible tangible :fixed fixed :q q))
 
 (defmethod print-object ((p particle) out)
   (print-unreadable-object (p out :type t)
@@ -104,3 +107,13 @@
    (lambda (accessor)
      (calculate-collision-in-direction accessor p1 p2))
    (list #'vec:x #'vec:y #'vec:z)))
+
+(defmethod electric-force ((p1 particle) (p2 particle))
+  (let* ((direction (vec:vec-minus (p p1) (p p2)))
+         (divisor (vec:square-magnitude direction))
+         (mag
+           (- (/ (* (q p1) (q p2) 8.988)
+                 (if (= 0 divisor)
+                     0.0000000000000001
+                     divisor)))))
+    (vec:scalar* mag (vec:inverse direction))))
