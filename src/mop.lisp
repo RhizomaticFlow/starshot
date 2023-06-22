@@ -38,7 +38,3 @@
                (update-object self ,(first clause) ,(second clause))))
           clauses
           :initial-value self))
-
-;; (defclass c () ((c :initarg :c :accessor c) (d :initarg :d :accessor d)))
-
-;; (format t "~a" (macroexpand '(update-object* (make-instance 'c :c 0 :d 0) ((:c 1) (:c (+ (c self) 1)) (:d (+ (c self) 2)) (:d 1)))))

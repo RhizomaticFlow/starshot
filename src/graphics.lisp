@@ -125,9 +125,11 @@
                              (vec:make-cartesian 0 0 0)
                              (vec:make-cartesian 0 0 0)
                              1 1 2 t)
-            ))))
+            )
+           600 600 600 :open)))
+    
     (sdl:with-init ()
-      (sdl:window 600 600 :title-caption "Move a rectangle using the mouse")
+      (sdl:window (width state) (height state) :title-caption "Move a rectangle using the mouse")
       (setf (sdl:frame-rate) 60)
       (sdl:with-events ()
         (:quit-event () t)

@@ -1,7 +1,7 @@
 (defpackage starshot/vector
   (:use :cl)
   (:import-from :tactile #:compose #:juxt #:callable #:partialr #:partial #:reduce-apply)
-  (:export #:make-cartesian #:magnitude #:vec+ #:vec-minus #:x #:y #:z #:inverse #:scalar/ #:scalar* #:angle-between #:dot-product #:cross-product #:cartesian #:square-magnitude))
+  (:export #:make-cartesian #:magnitude #:vec+ #:vec-minus #:x #:y #:z #:inverse #:scalar/ #:scalar* #:angle-between #:dot-product #:cross-product #:cartesian #:square-magnitude #:zero-cartesian))
 
 (in-package :starshot/vector)
 
@@ -20,59 +20,60 @@
   (declare (type real x y z))
   (make-instance 'cartesian :x x :y y :z z))
 
+(defun zero-cartesian ()
+  (make-instance 'cartesian :x 0 :y 0 :z 0))
+
 (defmethod print-object ((c cartesian) out)
   (print-unreadable-object (c out :type t)
     (format out "~a ~a ~a" (x c) (y c) (z c))))
 
-(defvar accessor-map
-  (lambda (obj)
-    (lambda (&rest accessors)
-      (lambda (&rest fns)
-        (mapcar (apply #'compose (cons (callable obj) fns)) accessors)))))
+;; Take an object and a list of accessors and create a function that maps over the accessors
 
-(defmethod map-cartesian ((c cartesian))
-  (reduce-apply accessor-map (list c) (list #'x #'y #'z)))
+(defun accessor-map (obj accessors fn)
+  (mapcar (compose (callable obj) fn) accessors))
+
+(defmethod map-cartesian ((c cartesian) fn)
+  (accessor-map c (list #'x #'y #'z) fn))
 
 (defvar square (partialr #'expt 2))
 
 (defmethod square-magnitude ((c cartesian))
   (apply #'+
-         (funcall (map-cartesian c) square)
-         ))
+         (map-cartesian c square)))
 
 (defmethod magnitude ((c cartesian))
   (funcall (compose #'square-magnitude #'sqrt) c))
 
 (defmethod normalize ((c cartesian))
   (apply #'make-cartesian
-         (funcall (map-cartesian c) (partialr #'/ (magnitude c)))))
+         (map-cartesian c (partialr #'/ (magnitude c)))))
 
 (defmethod scalar* (s (c cartesian))
   (apply #'make-cartesian
-         (funcall (map-cartesian c) (partial #'* s))))
+         (map-cartesian c (partial #'* s))))
 
 (defmethod scalar/ (s (c cartesian))
   (scalar* (/ 1 s) c))
 
 (defmethod inverse ((c cartesian))
   (apply #'make-cartesian
-         (funcall (map-cartesian c) (partial #'- 0))))
+         (map-cartesian c (partial #'- 0))))
 
 (defmethod vec+ ((c1 cartesian) (c2 cartesian))
-  (apply #'make-cartesian (mapcar #'+
-                          (funcall (map-cartesian c1))
-                          (funcall (map-cartesian c2)))))
+  (make-cartesian (+ (x c1) (x c2))
+                  (+ (y c1) (y c2))
+                  (+ (z c1) (z c2))))
 
 (defmethod vec-minus ((c1 cartesian) (c2 cartesian))
   (vec+ c1 (inverse c2)))
 
 (defmethod component-product ((c1 cartesian) (c2 cartesian))
-  (apply #'make-cartesian (mapcar #'*
-                                  (funcall (map-cartesian c1))
-                                  (funcall (map-cartesian c2)))))
+  (make-cartesian (* (x c1) (x c2))
+                  (* (y c1) (y c2))
+                  (* (z c1) (z c2))))
 
 (defmethod sum-components ((c cartesian))
-  (apply #'+ (funcall (map-cartesian c))))
+  (apply #'+ (map-cartesian c #'identity)))
 
 (defmethod dot-product ((c1 cartesian) (c2 cartesian))
   (funcall (compose #'component-product #'sum-components) c1 c2))

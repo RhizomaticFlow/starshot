@@ -24,10 +24,25 @@
     :accessor timestep)
    (particles
     :initarg :particles
-    :accessor particles)))
+    :accessor particles)
+   (width
+    ;; x
+    :initarg :width
+    :accessor width)
+   (height
+    ;; y
+    :initarg :height
+    :accessor height)
+   (depth
+    ;; z (for raytracing?)
+    :initarg :depth
+    :accessor depth)
+   (bounding
+    :initarg :bounding
+    :accessor bounding)))
 
-(defun make-p0 (timestep particles)
-  (make-instance 'p0 :timestep timestep :particles particles))
+(defun make-p0 (timestep particles width height depth bounding)
+  (make-instance 'p0 :timestep timestep :particles particles :width width :height height :depth depth :bounding bounding))
 
 (defmethod apply-collisions ((state p0))
   (mapcar

@@ -9,8 +9,8 @@
                 ((:file "mop")
                  (:file "vector")
                  (:file "particle")
-                 (:file "graphics")
-                 (:file "p0"))))
+                 (:file "p0")
+                 (:file "graphics"))))
   :description ""
   :in-order-to ((test-op (test-op "starshot/tests"))))
 

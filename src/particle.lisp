@@ -26,14 +26,21 @@
     :initarg :inverse-mass
     :accessor inverse-mass)
    (r
+    ;; Radius
     :initarg :r
     :accessor r)
    (tangible
+    ;; Boolean
     :initarg :tangible
-    :accessor tangible)))
+    :accessor tangible)
+   (fixed
+    ;; Boolean
+    :initarg :fixed
+    :accessor fixed
+    )))
 
-(defun make-particle (p v a damping inverse-mass r tangible)
-  (make-instance 'particle :p p :v v :a a :damping damping :inverse-mass inverse-mass :r r :tangible tangible))
+(defun make-particle (p v a damping inverse-mass r tangible fixed)
+  (make-instance 'particle :p p :v v :a a :damping damping :inverse-mass inverse-mass :r r :tangible tangible :fixed fixed))
 
 (defmethod print-object ((p particle) out)
   (print-unreadable-object (p out :type t)

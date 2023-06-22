@@ -10,12 +10,18 @@ Kinds of Systems:
 - P0 (Particles Only)
 - P1 (Particles and Springs)
 
-Outstanding Questions:
-- Modelling gravity and/or charge? Are these particle specific? Should they be in an inherited class, or just attributes?
+TODO:
+- Modelling gravity and/or charge? Are these particle specific? Should they be in an inherited class, or just attributes? 
 - Polar-coordinates?
 - Radiation?
 - Quantum mechanics?
+- Multi-threading?
+- Improvements to collisions E.G., manually moving them out the others box
+- Improvements to graphical rendering E.G., not just squares
 
 ## Usage & Installation
 (ql:quickload :starshot)
 (starshot/graphics:particles)
+
+## Testing
+(asdf:test-system 'starshot)
